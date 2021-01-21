@@ -55,20 +55,34 @@ cd ~/imgs
 #### 3.整合brunch框架与恢复镜像
   ##### 3.1 全程PC执行用户，手机及其他容器整合请跳过此步
   执行blkid或lsblk命令查看磁盘信息,并确定安装位置
-  ##### 【注意：该命令将安装到整块硬盘而非分区/安装到U盘】
-   ###### 如果你不想进行全盘安装，也请将其现行安装到现行准备的U盘中
+  ##### 全盘安装【注意：该命令将安装到整块硬盘而非分区/安装到U盘】
    执行命令：     
         sudo bash chromeos-install.sh -src *.bin -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
         
         实例：请勿照搬 sudo bash chromeos-install.sh -src *.bin -dst /dev/sda 
         
-   ###### U盘安装请跳转至步骤
+   ###### 没错，你好了，请跳转到最后的结束语句吧
+   
+  ##### 安装到单一分区
+   执行命令：
+        sudo mkdir /mnt/tmpch
+        sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
+        sudo bash chromeos-install.sh -src *.bin -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数
+
+   等待镜像写入结束，屏幕上会出现引导该系统的grub参数，将其复制并保存到你乐意存的地方，填入你已安装的grub的配置文件，如果你未安装grub且不知道该如何引导系统，请继续执行命令：
+        sudo mkdir /mnt/efi
+        sudo mkdir /mnt/imgefi
+        sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
+        sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
+        sudo cp -r /mnt/imgefi/efi/boot ~/
+        sudo mv ~/boot ~/ChromeOS
+        sudo nano ~/ChromeOS/grub.cfg
+        删掉里面的内容，把之前保存下来的配置粘贴进去
+        Ctrl+X退出，y保存，回车确认，修改完毕
+        sudo cp -r ~/ChromeOS /mnt/efi
         
-   好的，很显然，你的安装已经结束了，重启选择新的条目，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，即可进入激动人心的MIUI啦，不对，是扣人心弦，也不是，哦，对了，是清爽流畅的ChromeOS了
-   如果你重启碰到了一个蓝底的菜单，那么请你进BIOS把secure BOOT给他关了。如果你就是不想关，也可以在这个蓝屏一样的菜单里安装一个证书？密钥之类的东西，大概是这么选的："OK->Enroll key from disk->EFI-SYSTEM->brunch.der->Continue"，然后重启即可。
-   
-   
-   ##### 3.2 使用Termux或其他容器技术整合
+      
+  ##### 3.2 使用Termux或其他容器技术整合
    很显然，由于使用的容器技术，你并没有权限将其写入到容器之外的硬盘，所以你只能先制作一个chromeos镜像。
        执行命令：
          bash chromeos-install.sh -src *.bin -dst chromeos.img
@@ -77,5 +91,12 @@ cd ~/imgs
          
   Termux用户:可在退出ubuntu后在使用命令cp ~/ubuntu-fs/root/imgs/chromeos.img /sdcard将打包好的镜像移到sd卡根目录，再使用mtp传至windows即可。
   
-   ##### 3.3 使用U盘启动ChromeOS，并执行硬盘安装
+  ##### 3.3 使用U盘启动ChromeOS，并执行硬盘安装
    插入烧录了ChromeOS的U盘到需要安装的设备，启动设备并引导进入系统，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，具体时间视U盘读写速度而定。
+   接着你会看到一个白底有Chrome LOGO的界面，接着就是激活流程了，千篇一律，如果你需要使用U盘作为口袋系统的话，请按步骤激活系统，需要科学上网，办法有很多，最容易得到的的莫过于一台安卓10以上可以通过USB网络共享同时分享安卓代理的手机了，其他的就不一一赘述了。如果你只是想安装到电脑，那么
+   
+## 结束语句   
+   好的，很显然，你的安装已经结束了，重启选择新的条目，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，即可进入激动人心的MIUI啦，不对，是扣人心弦，也不是，哦，对了，是清爽流畅的ChromeOS了
+   如果你重启碰到了一个蓝底的菜单，那么请你进BIOS把secure BOOT给他关了。如果你就是不想关，也可以在这个蓝屏一样的菜单里安装一个类似证书？密钥之类的东西，大概要这么选："OK->Enroll key from disk->EFI-SYSTEM->brunch.der->Continue"，然后重启即可。
+   
+   
