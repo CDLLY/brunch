@@ -11,16 +11,16 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
 
 ## 安装流程
 
-首先，把整个ChromeOS安装到一个完整的物理硬盘上是最优解。
+首先，把整个ChromeOS安装到一个完整的物理硬盘上是最优解，主要是装得快。
 如果你非要安装在物理硬盘的某一个分区上，也是可以的，而且这样的话是支持安装到ntfs之类的分区的
 
 ### 0.工具准备
-推荐在linux平台进行，如果你要装在某一个特定分区，则需要一个至少有16GB空间的U盘。（不方便清U盘，但手机有空间和root权限可以用这个[DriveDroid](https://play.google.com/store/apps/details?id=com.softwarebakery.drivedroid)）
+推荐在linux平台进行，如果你电脑上没有安装linux发行版或容器内的linux，但却一定要装在某一个特定分区，则需要一个至少有16GB空间的U盘。（不方便清U盘，但手机有空间和root权限可以用这个[DriveDroid](https://play.google.com/store/apps/details?id=com.softwarebakery.drivedroid)）
 
 对于初次接触linux者：
 如果你实在没有使用linux的设备，请拿出手机，下载[Anlinux](https://play.google.com/store/apps/details?id=exa.lnx.a)和[Termux](https://play.google.com/store/apps/details?id=com.termux),按照anlinux的内置步骤安装ubuntu系统，通过这两个APP，即使你的手机没有root权限，你也可以搭建一个够用的linux环境。
 在准备好linux环境之后，你需要安装这样几个工具包wget,unzip,tar,pv和cgpt
-对于使用Termux的ubuntu用户来说，请键入以下命令：
+对于在Termux上使用ubuntu的用户，请键入以下命令：
 
     apt update
 
@@ -61,9 +61,73 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
     unzip *.zip 
    
 ### 3.整合brunch框架与恢复镜像以及安装到磁盘
-  #### 3.1 全程PC执行用户，手机及其他容器整合请跳转到步骤 3.2
+
+##### 使用PC上的linux发行版进行操作的用户请直接跳转到步骤 3.2
+  
+  #### 3.0 在使用Termux或其他容器技术的linux里整合镜像
+   很显然，由于使用的容器技术，你并没有权限将其写入到容器之外的硬盘，所以你只能先制作一个chromeos镜像。
+       执行命令：
+       
+         bash chromeos-install.sh -src *.bin -dst chromeos.img
+         
+   你得到了一个镜像。
+   ###### Termux用户可在退出ubuntu后执行以下命令，将打包好的镜像移到sd卡根目录，再使用mtp传至windows即可。
+   
+    mv ~/ubuntu-fs/root/imgs/chromeos.img /sdcard
+    
+   待镜像写入完成后，可使用[Rufus](https://rufus.ie/)、[Etcher](https://www.balena.io/etcher/)之类的烧录工具将其刷写到U盘。
+   
+   ##### 3.1 从ChromeOS安装ChromeOS。
+   插入烧录了ChromeOS的U盘到需要安装的设备，启动设备并引导进入系统，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，具体时间视U盘读写速度而定。
+   接着你会看到一个白底有Chrome LOGO的界面，接着就是激活流程了，千篇一律，如果你需要使用U盘作为口袋系统的话，请按步骤激活系统，需要科学上网，办法有很多，最容易得到的的莫过于一台安卓10以上可以通过USB网络共享同时分享安卓代理的手机了，其他的就不一一赘述了。
+   
+   如果你只是想安装到电脑，那么请在激活界面按下：Ctrl+Alt+F2。ps:有些本子可能还要加个Fn键才能按到F2功能键
+   你会进入一个命令行，根据提示让你输入用户名以登录，默认即为：chronos 没有密码
+   执行lsblk或sudo blkid命令查看磁盘信息,并确定安装位置
+   接下来输入命令：
+   ##### 3.1.1 全盘安装
+   
+    sudo chromeos-install -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
+             实例：sudo chromeos-install -dst /dev/sda  （请勿照搬）
+             
+   ###### 没错，你好了，请跳转到最后的结束语句吧
+   
+   ##### 3.1.2 单一分区安装
+   
+   sudo mkdir /mnt/tmpch
+        
+        sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
+        
+        sudo chromeos-install -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
+
+   等待镜像写入结束，屏幕上会出现引导该系统的grub参数，将其复制并保存到你乐意存的地方，填入你已安装的grub的配置文件，如果你未安装grub且不知道该如何引导系统，请继续执行命令：
+   
+        sudo mkdir /mnt/efi
+        
+        sudo mkdir /mnt/imgefi
+        
+        sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
+        
+        sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
+        
+        sudo cp -r /mnt/imgefi/efi/boot ~/
+        
+        sudo mv ~/boot ~/ChromeOS
+        
+        sudo nano ~/ChromeOS/grub.cfg
+        
+        删掉里面的内容，把之前保存下来的配置粘贴进去
+        Ctrl+X退出，y保存，回车确认，修改完毕
+        
+        sudo cp -r ~/ChromeOS /mnt/efi/efi
+        
+   因为ChromeOS并不带有修改UEFI启动项的工具包(反正我没找到)，所以你需要去windows或者其他系统添加引导项，windows的话推荐EasyUEFI,Bootice,以及最新版DiskGenius。
+   
+   ###### 没错，你终于好了，请跳转到最后的结束语句吧
+   
+   #### 3.2 目标设备有linux,全程PC执行用户
   执行blkid或lsblk命令查看磁盘信息,并确定安装位置
-  ##### 3.1.1 全盘安装【注意：该命令将安装到整块硬盘而非分区/安装到U盘】
+  ##### 3.2.1 全盘安装【注意：该命令将安装到整块硬盘而非分区/安装到U盘】
    执行命令：     
    
         sudo bash chromeos-install.sh -src *.bin -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
@@ -71,7 +135,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
         
    ###### 没错，你已经好了，请跳转到最后的结束语句吧
    
-  ##### 3.1.2 安装到单一分区
+  ##### 3.2.2 安装到单一分区
    执行命令：
    
         sudo mkdir /mnt/tmpch
@@ -102,70 +166,8 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
         sudo cp -r ~/ChromeOS /mnt/efi/efi
         
         sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需-d参数手动指定）
-             
-   ###### 没错，你好了，请跳转到最后的结束语句吧
-        
-      
-  #### 3.2 使用Termux或其他容器技术整合
-   很显然，由于使用的容器技术，你并没有权限将其写入到容器之外的硬盘，所以你只能先制作一个chromeos镜像。
-       执行命令：
-       
-         bash chromeos-install.sh -src *.bin -dst chromeos.img
-         
-   你得到了一个镜像。
-   ###### Termux用户可在退出ubuntu后执行以下命令，将打包好的镜像移到sd卡根目录，再使用mtp传至windows即可。
-   
-    cp ~/ubuntu-fs/root/imgs/chromeos.img /sdcard
-    
-   待镜像写入完成后，可使用[Rufus](https://rufus.ie/)、[Etcher](https://www.balena.io/etcher/)之类的烧录工具将其刷写到U盘，进行下一步安装。
-         
-  #### 3.3 使用U盘启动ChromeOS，并执行硬盘安装，在ChromeOS里进行安装
-   插入烧录了ChromeOS的U盘到需要安装的设备，启动设备并引导进入系统，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，具体时间视U盘读写速度而定。
-   接着你会看到一个白底有Chrome LOGO的界面，接着就是激活流程了，千篇一律，如果你需要使用U盘作为口袋系统的话，请按步骤激活系统，需要科学上网，办法有很多，最容易得到的的莫过于一台安卓10以上可以通过USB网络共享同时分享安卓代理的手机了，其他的就不一一赘述了。
-   
-   如果你只是想安装到电脑，那么请在激活界面按下：Ctrl+Alt+F2。ps:有些本子可能还要加个Fn键才能按到F2功能键
-   你会进入一个命令行，根据提示让你输入用户名以登录，默认即为：chronos 没有密码
-   执行lsblk或sudo blkid命令查看磁盘信息,并确定安装位置
-   接下来输入命令：
-   ##### 3.3.1 全盘安装
-   
-    sudo chromeos-install -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
-             实例：sudo chromeos-install -dst /dev/sda  （请勿照搬）
-             
-   ###### 没错，你也好了，请跳转到最后的结束语句吧
-   
-   ##### 3.3.2 单一分区安装
-   
-   sudo mkdir /mnt/tmpch
-        
-        sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
-        
-        sudo chromeos-install -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
-
-   等待镜像写入结束，屏幕上会出现引导该系统的grub参数，将其复制并保存到你乐意存的地方，填入你已安装的grub的配置文件，如果你未安装grub且不知道该如何引导系统，请继续执行命令：
-   
-        sudo mkdir /mnt/efi
-        
-        sudo mkdir /mnt/imgefi
-        
-        sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
-        
-        sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
-        
-        sudo cp -r /mnt/imgefi/efi/boot ~/
-        
-        sudo mv ~/boot ~/ChromeOS
-        
-        sudo nano ~/ChromeOS/grub.cfg
-        
-        删掉里面的内容，把之前保存下来的配置粘贴进去
-        Ctrl+X退出，y保存，回车确认，修改完毕
-        
-        sudo cp -r ~/ChromeOS /mnt/efi/efi
-        
-        sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需-d参数手动指定）
-             
-   ###### 没错，你终于好了，请跳转到最后的结束语句吧，诶？好像不用跳了呢...
+                        
+   ###### 没错，你好了，请跳转到最后的结束语句吧，诶？好像不用跳了呢...
    
 #### 4.结束语句   
    好的，很显然，你的安装已经结束了，重启选择新的条目，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，即可进入激动人心的MIUI啦，不对，是扣人心弦，也不是，哦，对了，是清爽流畅的ChromeOS了
