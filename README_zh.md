@@ -62,7 +62,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    
 ### 3.整合brunch框架与恢复镜像以及安装到磁盘
 
-##### 使用PC上的linux发行版进行操作的用户请直接跳转到[步骤 3.2](#3.2-目标设备有linux,全程PC执行用户)
+##### 使用PC上的linux发行版进行操作的用户请直接跳转到[步骤 3.2](#32-目标设备有linux全程pc执行用户)
   
   #### 3.0 在使用Termux或其他容器技术的linux里整合镜像
    很显然，由于使用的容器技术，你并没有权限将其写入到容器之外的硬盘，所以你只能先制作一个chromeos镜像。
@@ -90,7 +90,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
     sudo chromeos-install -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
              实例：sudo chromeos-install -dst /dev/sda  （请勿照搬）
              
-   ###### 没错，你好了，请跳转到最后的结束语句吧
+   ###### 没错，你好了，请[跳转到最后的结束语句](#4结束语句)吧
    
    ##### 3.1.2 单一分区安装
    
@@ -123,7 +123,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
         
    因为ChromeOS并不带有修改UEFI启动项的工具包(反正我没找到)，所以你需要去windows或者其他系统添加引导项，windows的话推荐EasyUEFI,Bootice,以及最新版DiskGenius。
    
-   ###### 没错，你终于好了，请跳转到最后的结束语句吧
+   ###### 没错，你终于好了，请[跳转到最后的结束语句](#4结束语句)吧
    
    #### 3.2 目标设备有linux,全程PC执行用户
   执行blkid或lsblk命令查看磁盘信息,并确定安装位置
@@ -133,7 +133,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
         sudo bash chromeos-install.sh -src *.bin -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
              实例：sudo bash chromeos-install.sh -src *.bin -dst /dev/sda  （请勿照搬）
         
-   ###### 没错，你已经好了，请跳转到最后的结束语句吧
+   ###### 没错，你已经好了，请[跳转到最后的结束语句](#4结束语句)吧
    
   ##### 3.2.2 安装到单一分区
    执行命令：
