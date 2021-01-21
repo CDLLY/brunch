@@ -85,7 +85,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    你会进入一个命令行，根据提示让你输入用户名以登录，默认即为：chronos 没有密码
    执行lsblk或sudo blkid命令查看磁盘信息,并确定安装位置
    接下来输入命令：
-   ##### 3.1.1 全盘安装
+   ##### 3.1.1 全盘安装【注意：该命令将安装到整块硬盘而非分区】
    
      sudo chromeos-install -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
              
@@ -95,7 +95,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    
    ##### 3.1.2 单一分区安装
    
-   sudo mkdir /mnt/tmpch
+     sudo mkdir /mnt/tmpch
         
      sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
         
