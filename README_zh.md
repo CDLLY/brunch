@@ -36,23 +36,32 @@ cd ~/imgs
 以上命令
 #### 1.镜像下载
  Brunch镜像下载：
-   打开该项目的[Releases页面](https://github.com/sebanc/brunch/releases)并复制其中的最新版本的下载链接，键入括号内的命令（wget 你复制的下载链接），等待下载完毕。
+   打开该项目的[Releases页面](https://github.com/sebanc/brunch/releases)并复制其中的最新版本的下载链接，键入命令：
+   
+     wget 你复制的下载链接
+  
  恢复镜像下载：  
-   打开[镜像1](https://cros-updates-serving.appspot.com/)或者[镜像2](https://cros.tech/)找一个和你硬件类似（主要是CPU）的ChromeBook的官方恢复映像(推荐第一个页面，信息比较直观)，并复制其下载链接，键入括号内的命令（wget 你复制的下载链接），等待下载完毕。
+   打开[镜像1](https://cros-updates-serving.appspot.com/)或者[镜像2](https://cros.tech/)找一个和你硬件类似（主要是CPU）的ChromeBook的官方恢复映像(推荐第一个页面，信息比较直观)，并复制其下载链接，键入命令：
+   
+     wget 你复制的下载链接
+   
+   等待下载完毕。
+   
    如果你懒得查型号配置，这也有推荐的方案：
    英特尔酷睿四代及四代以后的CPU选"rammus"
    英特尔酷睿三代及三代以前的CPU选"samus"
    英特尔赛扬N系列推荐选"coral"
    AMD平台的推荐选grunt
-   其他的自己老老实实翻各类Chromebook的配置去
+   其他的奇奇怪怪的平台就自己老老实实翻各类Chromebook的配置去
+
 #### 2.解压下载内容
    命令大概是这样：
    
-   tar zxvf *.tar.gz
+    tar zxvf *.tar.gz
    
-   unzip *.zip 
+    unzip *.zip 
    
-#### 3.整合brunch框架与恢复镜像
+#### 3.整合brunch框架与恢复镜像以及安装到磁盘
   ##### 3.1 全程PC执行用户，手机及其他容器整合请跳过此步
   执行blkid或lsblk命令查看磁盘信息,并确定安装位置
   ##### 全盘安装【注意：该命令将安装到整块硬盘而非分区/安装到U盘】
