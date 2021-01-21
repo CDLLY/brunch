@@ -45,6 +45,7 @@ Contrarily to the Croissant framework which mostly supports non-unibuilds images
 Currently:
 - "rammus" is the recommended image for devices with 4th generation Intel CPU and newer.
 - "samus" is the recommended image for devices with 3rd generation Intel CPU and older.
+- "coral" is the recommended image for devices with Intel® Celeron® Processor N Series.
 - "grunt" is the image to use if you have supported AMD hardware.
 
 If you have a doubt on the recovery image to use, the "brunch-toolkit" from WesBosch has a compatibility check feature which detects the recovery image to use:
