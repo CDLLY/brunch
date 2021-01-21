@@ -61,25 +61,41 @@ cd ~/imgs
         
         实例：请勿照搬 sudo bash chromeos-install.sh -src *.bin -dst /dev/sda 
         
-   ###### 没错，你好了，请跳转到最后的结束语句吧
+   ###### 没错，你已经好了，请跳转到最后的结束语句吧
    
   ##### 安装到单一分区
    执行命令：
+   
         sudo mkdir /mnt/tmpch
+        
         sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
-        sudo bash chromeos-install.sh -src *.bin -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数
+        
+        sudo bash chromeos-install.sh -src *.bin -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
 
    等待镜像写入结束，屏幕上会出现引导该系统的grub参数，将其复制并保存到你乐意存的地方，填入你已安装的grub的配置文件，如果你未安装grub且不知道该如何引导系统，请继续执行命令：
+   
         sudo mkdir /mnt/efi
+        
         sudo mkdir /mnt/imgefi
+        
         sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
+        
         sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
+        
         sudo cp -r /mnt/imgefi/efi/boot ~/
+        
         sudo mv ~/boot ~/ChromeOS
+        
         sudo nano ~/ChromeOS/grub.cfg
+        
         删掉里面的内容，把之前保存下来的配置粘贴进去
         Ctrl+X退出，y保存，回车确认，修改完毕
-        sudo cp -r ~/ChromeOS /mnt/efi
+        
+        sudo cp -r ~/ChromeOS /mnt/efi/efi
+        
+        sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需-d参数手动指定）
+             
+   ###### 没错，你好了，请跳转到最后的结束语句吧
         
       
   ##### 3.2 使用Termux或其他容器技术整合
