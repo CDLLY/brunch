@@ -22,13 +22,13 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
 在准备好linux环境之后，你需要安装这样几个工具包wget,unzip,tar,pv和cgpt
 对于在Termux上使用ubuntu的用户，请键入以下命令：
 
-    apt update
+     apt update
 
-    apt install unzip tar pv cgpt -y
+     apt install unzip tar pv cgpt -y
 
-    mkdir ~/imgs
+     mkdir ~/imgs
 
-    cd ~/imgs
+     cd ~/imgs
 
 （电脑用户就加个sudo嘛...）
 在打包结束前，都请在当前窗口进行操作
@@ -56,9 +56,9 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
 ### 2.解压下载内容
    命令大概是这样：
    
-    tar zxvf *.tar.gz
+     tar zxvf *.tar.gz
    
-    unzip *.zip 
+     unzip *.zip 
    
 ### 3.整合brunch框架与恢复镜像以及安装到磁盘
 
@@ -68,12 +68,12 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    很显然，由于使用的容器技术，你并没有权限将其写入到容器之外的硬盘，所以你只能先制作一个chromeos镜像。
        执行命令：
        
-         bash chromeos-install.sh -src *.bin -dst chromeos.img
+     bash chromeos-install.sh -src *.bin -dst chromeos.img
          
    你得到了一个镜像。
    ###### Termux用户可在退出ubuntu后执行以下命令，将打包好的镜像移到sd卡根目录，再使用mtp传至windows即可。
    
-    mv ~/ubuntu-fs/root/imgs/chromeos.img /sdcard
+     mv ~/ubuntu-fs/root/imgs/chromeos.img /sdcard
     
    待镜像写入完成后，可使用[Rufus](https://rufus.ie/)、[Etcher](https://www.balena.io/etcher/)之类的烧录工具将其刷写到U盘。
    
@@ -87,8 +87,9 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    接下来输入命令：
    ##### 3.1.1 全盘安装
    
-    sudo chromeos-install -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
-             实例：sudo chromeos-install -dst /dev/sda  （请勿照搬）
+     sudo chromeos-install -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
+             
+              实例：sudo chromeos-install -dst /dev/sda  （请勿照搬）
              
    ###### 没错，你好了，请[跳转到最后的结束语句](#4结束语句)吧
    
@@ -96,30 +97,30 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    
    sudo mkdir /mnt/tmpch
         
-        sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
+     sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
         
-        sudo chromeos-install -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
+     sudo chromeos-install -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
 
    等待镜像写入结束，屏幕上会出现引导该系统的grub参数，将其复制并保存到你乐意存的地方，填入你已安装的grub的配置文件，如果你未安装grub且不知道该如何引导系统，请继续执行命令：
    
-        sudo mkdir /mnt/efi
+     sudo mkdir /mnt/efi
         
-        sudo mkdir /mnt/imgefi
+     sudo mkdir /mnt/imgefi
         
-        sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
+     sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
         
-        sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
+     sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
         
-        sudo cp -r /mnt/imgefi/efi/boot ~/
+     sudo cp -r /mnt/imgefi/efi/boot ~/
         
-        sudo mv ~/boot ~/ChromeOS
+     sudo mv ~/boot ~/ChromeOS
         
-        sudo nano ~/ChromeOS/grub.cfg
+     sudo nano ~/ChromeOS/grub.cfg
         
         删掉里面的内容，把之前保存下来的配置粘贴进去
         Ctrl+X退出，y保存，回车确认，修改完毕
         
-        sudo cp -r ~/ChromeOS /mnt/efi/efi
+     sudo cp -r ~/ChromeOS /mnt/efi/efi
         
    因为ChromeOS并不带有修改UEFI启动项的工具包(反正我没找到)，所以你需要去windows或者其他系统添加引导项，windows的话推荐EasyUEFI,Bootice,以及最新版DiskGenius。
    
@@ -130,42 +131,43 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
   ##### 3.2.1 全盘安装【注意：该命令将安装到整块硬盘而非分区/安装到U盘】
    执行命令：     
    
-        sudo bash chromeos-install.sh -src *.bin -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
-             实例：sudo bash chromeos-install.sh -src *.bin -dst /dev/sda  （请勿照搬）
+     sudo bash chromeos-install.sh -src *.bin -dst 你的硬盘位置（例如/dev/sdx或/dev/mmcblkx,x为未知数）
+             
+            实例：sudo bash chromeos-install.sh -src *.bin -dst /dev/sda  （请勿照搬）
         
    ###### 没错，你已经好了，请[跳转到最后的结束语句](#4结束语句)吧
    
   ##### 3.2.2 安装到单一分区
    执行命令：
    
-        sudo mkdir /mnt/tmpch
+     sudo mkdir /mnt/tmpch
         
-        sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
+     sudo mount /dev/sdxx /mnt/tmpch    (sdxx是你要安装的分区，例如sda4，可以是ext4也可以是其他的)
         
-        sudo bash chromeos-install.sh -src *.bin -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
+     sudo bash chromeos-install.sh -src *.bin -dst /mnt/tmpch/chromeos.img -s 你要分配给ChromeOS的空间大小，单位GB。 （其中系统大概会占10GB。如果你要填满整个分区，就删去-s参数）
 
    等待镜像写入结束，屏幕上会出现引导该系统的grub参数，将其复制并保存到你乐意存的地方，填入你已安装的grub的配置文件，如果你未安装grub且不知道该如何引导系统，请继续执行命令：
    
-        sudo mkdir /mnt/efi
+     sudo mkdir /mnt/efi
         
-        sudo mkdir /mnt/imgefi
+     sudo mkdir /mnt/imgefi
         
-        sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
+     sudo mount 填写你efi分区的位置一般是/dev/sda1 /mnt/efi
         
-        sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
+     sudo mount -v -o offset=1235226624 -t vfat /mnt/tmpch/chromeos.img /mnt/imgefi
         
-        sudo cp -r /mnt/imgefi/efi/boot ~/
+     sudo cp -r /mnt/imgefi/efi/boot ~/
         
-        sudo mv ~/boot ~/ChromeOS
+     sudo mv ~/boot ~/ChromeOS
         
-        sudo nano ~/ChromeOS/grub.cfg
+     sudo nano ~/ChromeOS/grub.cfg
         
         删掉里面的内容，把之前保存下来的配置粘贴进去
         Ctrl+X退出，y保存，回车确认，修改完毕
         
-        sudo cp -r ~/ChromeOS /mnt/efi/efi
+     sudo cp -r ~/ChromeOS /mnt/efi/efi
         
-        sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需-d参数手动指定）
+     sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需-d参数手动指定）
                         
    ###### 没错，你好了，请跳转到最后的结束语句吧，诶？好像不用跳了呢...
    
