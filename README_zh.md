@@ -1,6 +1,7 @@
 # Brunch 框架
 
 ## 简介
+[In English](https://github.com/sebanc/brunch/blob/master/README.md)
 
 首先，先感谢Croissant、swtpm maintainer、Chromebrew framework这些项目的开发与维护，这些项目对Brunch框架的开发非常有作用。
 
@@ -10,6 +11,8 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
 哎，其他的什么声明之类的就先不扯了，看[英文完整版](https://github.com/sebanc/brunch/blob/master/README.md)的机翻应该也差不多，直接到安装流程吧。
 
 ## 安装流程
+
+###### 注意：本教程需按照条件跳转，以程序形式顺序阅读
 
 首先，把整个ChromeOS安装到一个完整的物理硬盘上是最优解，主要是装得快。
 如果你非要安装在物理硬盘的某一个分区上，也是可以的，而且这样的话是支持安装到ntfs之类的分区的
