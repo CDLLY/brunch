@@ -19,6 +19,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
 
 对于初次接触linux者：
 如果你实在没有使用linux的设备，请拿出手机，下载[Anlinux](https://play.google.com/store/apps/details?id=exa.lnx.a)和[Termux](https://play.google.com/store/apps/details?id=com.termux),按照anlinux的内置步骤安装ubuntu系统，通过这两个APP，即使你的手机没有root权限，你也可以搭建一个够用的linux环境。
+
 在准备好linux环境之后，你需要安装这样几个工具包wget,unzip,tar,pv和cgpt
 对于在Termux上使用ubuntu的用户，请键入以下命令：
 
@@ -31,8 +32,8 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
      cd ~/imgs
 
 （电脑用户就加个sudo嘛...）
-在打包结束前，都请在当前窗口进行操作
-以上命令
+在镜像整合结束前，都请在当前窗口进行操作～
+
 ### 1.镜像下载
  Brunch镜像下载：
    打开该项目的[Releases页面](https://github.com/sebanc/brunch/releases)并复制其中的最新版本的下载链接，键入命令：
@@ -73,7 +74,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    你得到了一个镜像。
    ###### Termux用户可在退出ubuntu后执行以下命令，将打包好的镜像移到sd卡根目录，再使用mtp传至windows即可。
    
-     mv ~/ubuntu-fs/root/imgs/chromeos.img /sdcard
+     mv ~/ubuntu-fs/root/imgs/chromeos.img /sdcard （在此之前，记得要给Termux储存权限哦）
     
    待镜像写入完成后，可使用[Rufus](https://rufus.ie/)、[Etcher](https://www.balena.io/etcher/)之类的烧录工具将其刷写到U盘。
    
