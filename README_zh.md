@@ -130,6 +130,8 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
         
    因为ChromeOS并不带有修改UEFI启动项的工具包(反正我没找到)，所以你需要去windows或者其他系统添加引导项，windows的话推荐EasyUEFI,Bootice,以及最新版DiskGenius。
    
+   如果你实在没有这方面的经验请跳转到[EasyUEFI引导添加教程](#Ex1-在Windows添加ChromeOS启动项)
+   
    ###### 没错，你终于好了，请[跳转到最后的语句](#4结束语句)吧！◑﹏◐
    
    #### 3.2 从linux安装到磁盘
@@ -175,7 +177,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
         
      sudo cp -r ~/ChromeOS /mnt/efi/efi
         
-     sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需-d参数手动指定）
+     sudo efibootmgr -c -l '\efi\ChromeOS\grubx64.efi' -L ChromeOS （若efi引导分区不在/dev/sda，则需添加-d参数手动指定）
                         
    ###### 没错，你好了，请跳转到最后的语句吧，诶？好像不用跳了呢...⊙_⊙
    
@@ -183,5 +185,12 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    好的，很显然，你的安装已经结束了，重启选择新的条目，初次进入的话，你会看到Brunch的LOGO，并且在这个界面等待数分钟，即可进入激动人心的MIUI啦，不对，是扣人心弦，也不是，哦，对了，是清爽流畅的ChromeOS了
    如果你重启碰到了一个蓝底的菜单，那么请你进BIOS把secure BOOT给他关了。如果你就是不想关，也可以在这个蓝屏一样的菜单里安装一个类似证书？密钥之类的东西，大概要这么选："OK->Enroll key from disk->EFI-SYSTEM->brunch.der->Continue"，然后重启即可。
    
-## 其他
+## 附录
+
+ #### Ex1 在Windows添加ChromeOS启动项
+   
+   第一篇附录的主角呢，自然是这个叫做[EasyUEFI](https://www.easyuefi.com/index-us.html)的软件啦，至于为什么要选它？
+   
+   答案非常简单嘛，因为他连名字都带了一个简单，所以它肯定是使用起来最简单的（虽然一个软件公司做这么个小东西还卖钱一看就很没有前途，不过我们用的是试用版...）
+ 
    其他东西当然是以后再说啦...🕊️🕊️
