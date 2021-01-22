@@ -34,7 +34,7 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
 
      cd ~/imgs
 
-（电脑用户就加个sudo嘛...）
+（传统linux用户就加个sudo嘛...）
 在镜像整合结束前，都请在当前窗口进行操作～
 
 ### 1.镜像下载
@@ -42,6 +42,9 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    打开该项目的[Releases页面](https://github.com/sebanc/brunch/releases)并复制其中的最新版本的下载链接，键入命令：
    
      wget 你复制的下载链接
+     
+     传统linux用户的话直接输入以下命令即可：
+     curl -s https://api.github.com/repos/sebanc/brunch/releases/latest | grep "browser_download_url.*.tar.gz" | cut -d '"' -f 4 | wget -i -
   
  恢复镜像下载：  
    打开[镜像1](https://cros-updates-serving.appspot.com/)或者[镜像2](https://cros.tech/)找一个和你硬件类似（主要是CPU）的ChromeBook的官方恢复映像(推荐第一个页面，信息比较直观)，并复制其下载链接，键入命令：
@@ -51,10 +54,15 @@ Bruch是一个能让谷歌ChromeOS运行在第三方设备上的驱动框架,其
    等待下载完毕。
    
    如果你懒得查型号配置，这也有推荐的方案：
+   
    英特尔酷睿四代及四代以后的CPU选"rammus"
+   
    英特尔酷睿三代及三代以前的CPU选"samus"
+   
    英特尔赛扬N系列推荐选"coral"
+   
    AMD平台的推荐选grunt
+   
    其他的奇奇怪怪的平台就自己老老实实翻各类Chromebook的配置去
 
 ### 2.解压下载内容
